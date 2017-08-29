@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Biên tập kí âm sáo trúc</title>
+        <meta charset="utf-8" />
+        <script>
+            var notename = ["đô0", "đô0#", "rê0", "mi0b", "mi0", "fa0", "fa0#", "sol0", "sol0#", "la0", "si0b", "si0", "đô", "đô#", "rê", "mib", "mi", "fa", "fa#", "sol", "sol#", "la", "sib", "si", "đố", "đố#", "rế", "míb", "mí", "fá", "fá#", "sól", "sól#", "lá", "síb", "sí", "đố3", "đố3#", "rế3", "míb3", "mí3", "fá3", "fá3#", "sól3", "sól3#", "lá3", "síb3", "sí3"];
+            function parseNode(note_string)
+            {
+                return notename.indexOf(note_string);
+            }
+            
+            function parseSheet(sheet_string)
+            {
+                var song = [];
+                sheet_string = sheet_string.trim();
+                var lines = sheet_string.split("\n");
+                for(var line of lines)
+                {
+                    var notes = [];
+                    var words = line.trim().split(/ +/g);
+                    for(var note_string of words)
+                    {
+                        notes.push(parseNode(note_string));
+                    }
+                    song.push(notes);
+                }
+                return song;
+            }
+            
+            function toSheet(song)
+            {
+                var sheet = "";
+                for(var notes of song)
+                {
+                    sheet += notes.map(note => notename[note]).join(" ") + "\n";
+                }
+                return sheet;
+            }
+            
+            function checkShift(song, amount)
+            {
+                return !song.some(notes => notes.some(note => (note + amount < 0 || note + amount > notename.length - 1) ));
+            }
+            
+            function shiftSong(song, amount)
+            {
+                return song.map(words => words.map(word => word + amount));
+            }
+        </script>
+        <style>
+            #stdin
+            {
+                width: 500px;
+                height: 300px;
+            }
+        </style>
+    </head>
+    <body>
+        <textarea id="stdin" >
+fa fa đố la sib đố
+rế đố đố
+la la la sol la đố fa
+fa la sol fa đô
+</textarea>
+        <div>
+            <span>Dịch nốt:</span>
+            <div class="button_container" >
+                <input type="button" value="-" onclick="shift(-1)" ></input>
+                <input type="button" value="+" onclick="shift(+1)" ></input>
+            </div>
+        </div>
+        <div id="stdout" >
+<b>Quy ước:</b><br />
+Quãng 1: có 12 nốt, bao gồm cả thăng(#), giáng (b): đô, đô#, rê, rê#, mi, fa, fa#, sol, sol#, la, sib, si<br />
+Quãng 2: thêm dấu sắc vào mỗi tên nốt: <i>đố, rế, mí, fá, sól, ...</i><br />
+Quãng 3: như quãng 2, nhưng thêm số 3 vào sau mỗi nốt: <i>đố3, rế3, mí3, fá3, ...</i><br />
+Quãng 0: viết như quãng 1, nhưng thêm dấu huyền vào mỗi nốt: đồ, rề, mì, fà, sòl, ...<br />
+        </pre>
+        <script>
+            /* global shiftSong, parseSheet, toSheet, checkShift */
+            function shift(amount)
+            {
+                var sheet = document.getElementById("stdin").value;
+                var song = parseSheet(sheet);
+                if(checkShift(song, amount))
+                {
+                    song = shiftSong(song, amount);
+                    document.getElementById("stdin").value = toSheet(song);
+                }
+                else
+                {
+                    console.log("invalid song!");
+                }
+            };
+            window.onload = function(e)
+            {
+            };
+        </script>
+    </body>
+</html>
