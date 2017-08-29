@@ -59,15 +59,18 @@
             function shiftSheet(sheet_string, amount)
             {
                 sheet_string = normalizeNote(sheet_string);
-                return sheet_string.replace(/[a-z0-9#báàêếềíìóòôốồđ]+/ig, function(m)
+                var complete = true;
+                var sheet_string1 = sheet_string.replace(/[a-z0-9#báàêếềíìóòôốồđ]+/ig, function(m)
                 {
                     var note = parseNote(m.toLowerCase());
-                    if(note > -1)
+                    if(note + amount > -1 && note + amount < notename.length)
                     {
                         return notename[note + amount];
                     }
+                    complete = false;
                     return m;
                 });
+                return complete ? sheet_string1 : sheet_string;
             }
         </script>
         <style>
@@ -117,6 +120,7 @@ Quãng 0: viết như quãng 1, nhưng thêm dấu huyền vào mỗi nốt: đ�
                 }
                 */
                 document.getElementById("stdin").value = shiftSheet(sheet, amount);
+
             };
             window.onload = function(e)
             {
