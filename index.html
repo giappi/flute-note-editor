@@ -4,16 +4,24 @@
         <title>Biên tập kí âm sáo trúc</title>
         <meta charset="utf-8" />
         <script>
-            var notename = ["đô0", "đô0#", "rê0", "mi0b", "mi0", "fa0", "fa0#", "sol0", "sol0#", "la0", "si0b", "si0", "đô", "đô#", "rê", "mib", "mi", "fa", "fa#", "sol", "sol#", "la", "sib", "si", "đố", "đố#", "rế", "míb", "mí", "fá", "fá#", "sól", "sól#", "lá", "síb", "sí", "đố3", "đố3#", "rế3", "míb3", "mí3", "fá3", "fá3#", "sól3", "sól3#", "lá3", "síb3", "sí3"];
-            function parseNode(note_string)
+            var notename = ["đô0", "đô0#", "rê0", "mi0b", "mi0", "fa0", "fa0#", "sol0", "sol0#", "la0", "xi0b", "xi0", "đô", "đô#", "rê", "mib", "mi", "fa", "fa#", "sol", "sol#", "la", "xib", "xi", "đố", "đố#", "rế", "míb", "mí", "fá", "fá#", "sól", "sól#", "lá", "xíb", "xí", "đô3", "đô3#", "rê3", "mib3", "mi3", "fa3", "fa3#", "sol3", "sol3#", "la3", "xib3", "xi3"];
+            var notename_ext = {"đô2": "đố", "đô#2": "đố#", "rê2": "rế", "mi2b": "míb", "mi2": "mí", "fa2": "fá", "fa#2":"fá#", "sol2": "sól", "sol#2": "sól#", "la2": "lá", "xib2": "xíb", "xi2": "xí"};
+            
+            function normalizeNote(note_string)
             {
-                return notename.indexOf(note_string);
+                return notename_ext[note_string] || note_string;
+            }
+            
+            function parseNote(note_string)
+            {
+                return notename.indexOf(note_string.toLowerCase());
             }
             
             function parseSheet(sheet_string)
             {
                 var song = [];
                 sheet_string = sheet_string.trim();
+                sheet_string = normalizeNote(sheet_string);
                 var lines = sheet_string.split("\n");
                 for(var line of lines)
                 {
@@ -21,7 +29,7 @@
                     var words = line.trim().split(/ +/g);
                     for(var note_string of words)
                     {
-                        notes.push(parseNode(note_string));
+                        notes.push(parseNote(note_string));
                     }
                     song.push(notes);
                 }
@@ -46,6 +54,20 @@
             function shiftSong(song, amount)
             {
                 return song.map(words => words.map(word => word + amount));
+            }
+            
+            function shiftSheet(sheet_string, amount)
+            {
+                sheet_string = normalizeNote(sheet_string);
+                return sheet_string.replace(/[a-z0-9#báàêếềíìóòôốồđ]+/ig, function(m)
+                {
+                    var note = parseNote(m.toLowerCase());
+                    if(note > -1)
+                    {
+                        return notename[note + amount];
+                    }
+                    return m;
+                });
             }
         </script>
         <style>
@@ -78,11 +100,12 @@ Quãng 3: như quãng 2, nhưng thêm số 3 vào sau mỗi nốt: <i>đố3, r�
 Quãng 0: viết như quãng 1, nhưng thêm dấu huyền vào mỗi nốt: đồ, rề, mì, fà, sòl, ...<br />
         </pre>
         <script>
-            /* global shiftSong, parseSheet, toSheet, checkShift */
+            /* global shiftSong, parseSheet, toSheet, checkShift, shiftSheet */
             function shift(amount)
             {
                 var sheet = document.getElementById("stdin").value;
                 var song = parseSheet(sheet);
+                /*
                 if(checkShift(song, amount))
                 {
                     song = shiftSong(song, amount);
@@ -92,6 +115,8 @@ Quãng 0: viết như quãng 1, nhưng thêm dấu huyền vào mỗi nốt: đ�
                 {
                     console.log("invalid song!");
                 }
+                */
+                document.getElementById("stdin").value = shiftSheet(sheet, amount);
             };
             window.onload = function(e)
             {
