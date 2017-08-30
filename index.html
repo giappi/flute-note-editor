@@ -63,7 +63,7 @@
                 var sheet_string1 = sheet_string.replace(/[a-z0-9#báàêếềíìóòôốồđ]+/ig, function(m)
                 {
                     var note = parseNote(m.toLowerCase());
-                    if(note + amount > -1 && note + amount < notename.length)
+                    if(note > -1 && note + amount > -1 && note + amount < notename.length)
                     {
                         return notename[note + amount];
                     }
@@ -83,7 +83,7 @@
     </head>
     <body>
         <textarea id="stdin" >
-fa fa đố la sib đố
+fa fa đố la xib đố
 rế đố đố
 la la la sol la đố fa
 fa la sol fa đô
@@ -97,10 +97,10 @@ fa la sol fa đô
         </div>
         <div id="stdout" >
 <b>Quy ước:</b><br />
-Quãng 1: có 12 nốt, bao gồm cả thăng(#), giáng (b): đô, đô#, rê, rê#, mi, fa, fa#, sol, sol#, la, sib, si<br />
-Quãng 2: thêm dấu sắc vào mỗi tên nốt: <i>đố, rế, mí, fá, sól, ...</i><br />
-Quãng 3: như quãng 2, nhưng thêm số 3 vào sau mỗi nốt: <i>đố3, rế3, mí3, fá3, ...</i><br />
-Quãng 0: viết như quãng 1, nhưng thêm dấu huyền vào mỗi nốt: đồ, rề, mì, fà, sòl, ...<br />
+Quãng 1: có 12 nốt, bao gồm cả thăng(#), giáng (b): đô, đô#, rê, mib, mi, fa, fa#, sol, sol#, la, xib, xi<br />
+Quãng 2: thêm dấu sắc vào mỗi tên nốt: <i>đố, đố#, rế, míb, mí, fá, fá# sól, ...</i><br />
+Quãng 3: thêm số 3 vào sau mỗi nốt: <i>đô3, đô#3, rê3, mi3b, mi3, fa3, ...</i><br />
+Quãng 0: thêm dấu huyền vào mỗi nốt: <i>đồ, đồ#, rề, mìb, mì, fà, fà#, sòl, ...</i><br />
         </pre>
         <script>
             /* global shiftSong, parseSheet, toSheet, checkShift, shiftSheet */
