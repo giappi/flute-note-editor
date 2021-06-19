@@ -4,7 +4,7 @@
         <title>Biên tập kí âm sáo trúc</title>
         <meta charset="utf-8" />
         <script>
-            var notename = ["đô0", "đô0#", "rê0", "mi0b", "mi0", "fa0", "fa0#", "sol0", "sol0#", "la0", "xi0b", "xi0", "đô", "đô#", "rê", "mib", "mi", "fa", "fa#", "sol", "sol#", "la", "xib", "xi", "đố", "đố#", "rế", "míb", "mí", "fá", "fá#", "sól", "sól#", "lá", "xíb", "xí", "đô3", "đô3#", "rê3", "mib3", "mi3", "fa3", "fa3#", "sol3", "sol3#", "la3", "xib3", "xi3"];
+            var notename = [ "đô0", "đô0#", "rê0", "mi0b", "mi0", "fa0", "fa0#", "sol0", "sol0#", "la0", "xi0b", "xi0", "đô", "đô#", "rê", "mib", "mi", "fa", "fa#", "sol", "sol#", "la", "xib", "xi", "đố", "đố#", "rế", "míb", "mí", "fá", "fá#", "sól", "sól#", "lá", "xíb", "xí", "đô3", "đô3#", "rê3", "mib3", "mi3", "fa3", "fa3#", "sol3", "sol3#", "la3", "xib3", "xi3"];
             var notename_ext = {"đô2": "đố", "đô#2": "đố#", "rê2": "rế", "mi2b": "míb", "mi2": "mí", "fa2": "fá", "fa#2":"fá#", "sol2": "sól", "sol#2": "sól#", "la2": "lá", "xib2": "xíb", "xi2": "xí"};
             
             function normalizeNote(note_string)
@@ -58,16 +58,17 @@
             
             function shiftSheet(sheet_string, amount)
             {
-                sheet_string = normalizeNote(sheet_string);
+                sheet_string = sheet_string.toLowerCase();
                 var complete = true;
                 var sheet_string1 = sheet_string.replace(/[a-z0-9#báàêếềíìóòôốồđ]+/ig, function(m)
                 {
-                    var note = parseNote(m.toLowerCase());
+                    var note = parseNote(normalizeNote(m));
+                    console.log(m, "=> " ,note);
                     if(note > -1 && note + amount > -1 && note + amount < notename.length)
                     {
                         return notename[note + amount];
                     }
-                    complete = false;
+                    //complete = false;
                     return m;
                 });
                 return complete ? sheet_string1 : sheet_string;
@@ -78,6 +79,7 @@
             {
                 width: 500px;
                 height: 300px;
+                font-family: "Courier New";
             }
         </style>
     </head>
@@ -127,4 +129,5 @@ Quãng 0: thêm dấu huyền vào mỗi nốt: <i>đồ, đồ#, rề, mìb, m�
             };
         </script>
     </body>
+<!-- https://github.com/giappi/flute-note-editor.git -->
 </html>
