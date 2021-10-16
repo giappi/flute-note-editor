@@ -60,7 +60,7 @@
             {
                 sheet_string = sheet_string.toLowerCase();
                 var complete = true;
-                var sheet_string1 = sheet_string.replace(/[a-z0-9#báàêếềíìóòôốồđ]+/ig, function(m)
+                var sheet_string1 = sheet_string.replace(/[a-z#báàêếềíìóòôốồđ]+[0-9]?/ig, function(m)
                 {
                     var note = parseNote(normalizeNote(m));
                     console.log(m, "=> " ,note);
